@@ -1,0 +1,46 @@
+# This is the model maker for the Invertible Neural Network
+
+# From Built-in
+from time import time
+
+# From libs
+import torch
+import torch.nn as nn
+import torch.optim
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+# From FrEIA
+from FrEIA.framework import InputNode, OutputNode, Node, ReversibleGraphNet
+from FrEIA.modules import GLOWCouplingBlock, PermuteRandom
+
+
+def INN(flags):
+    """
+    The constructor for INN network
+    :param flags: input flags from configuration
+    :return: The INN network
+    """
+    # Start from input layer
+    nodes = [InputNode(flags.dim_tot, name='input')]
+    # Recursively add the coupling layers and random permutation layer
+    for i in range(flags.couple_layer_num):
+        nodes.append(Node(nodes[-1], GLOWCouplingBlock,
+                          {'subnet_constructor': subnet_fc,
+                           'clamp': 2.0},
+                          name='coupling_{}'.format(i)))
+        nodes.append(Node(nodes[-1], PermuteRandom, {'seed': i}, name='permute_{}'.format(i)))
+    # Attach the output Node
+    nodes.append(OutputNode(nodes[-1], name='output'))
+    print("The nodes are:", nodes)
+    # Return the
+    return ReversibleGraphNet(nodes, verbose=True)
+
+##########
+# Subnet #
+##########
+
+def subnet_fc(c_in, c_out):
+    return nn.Sequential(nn.Linear(c_in, 512), nn.ReLU(), nn.Linear(512,512),nn.ReLU(),
+                         nn.Linear(512,  c_out))
