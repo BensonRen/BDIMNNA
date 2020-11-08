@@ -432,18 +432,25 @@ class Network(object):
             sys.exit("In NA, during initialization from uniform to dataset distrib: Your data_set entry is not correct, check again!")
 
 
-    def predict(self, Xpred_file, no_save=False):
+    def predict(self, Xpred_file, no_save=False, load_state_dict=None):
         """
         The prediction function, takes Xpred file and write Ypred file using trained model
         :param Xpred_file: Xpred file by (usually VAE) for meta-material
         :param no_save: do not save the txt file but return the np array
+        :param load_state_dict: If None, load model using self.load() (default way), If a dir, load state_dict from that dir
         :return: pred_file, truth_file to compare
         """
-        self.load()         # load the model
+        if load_state_dict is None:
+            self.load()         # load the model in the usual way
+        else:
+            self.model.load_state_dict(torch.load(load_state_dict))
         Ypred_file = Xpred_file.replace('Xpred', 'Ypred')
         Ytruth_file = Ypred_file.replace('Ypred', 'Ytruth')
         Xpred = pd.read_csv(Xpred_file, header=None, delimiter=',')     # Read the input
+        if len(Xpred.columns) == 1: # The file is not delimitered by ',' but ' '
+            Xpred = pd.read_csv(Xpred_file, header=None, delimiter=' ')
         Xpred.info()
+        print(Xpred.head())
         Xpred_tensor = torch.from_numpy(Xpred.values).to(torch.float)
 
         cuda = True if torch.cuda.is_available() else False
@@ -451,7 +458,9 @@ class Network(object):
             self.model.cuda()
             Xpred_tensor = Xpred_tensor.cuda()
         Ypred = self.model(Xpred_tensor)
-        if self.flags.model_name is not None:
+        if load_state_dict is not None:
+            Ypred_file = Ypred_file.replace('Ypred', 'Ypred' + load_state_dict[-7:-4])
+        elif self.flags.model_name is not None:
                 Ypred_file = Ypred_file.replace('Ypred', 'Ypred' + self.flags.model_name)
         if no_save:                             # If instructed dont save the file and return the array
              return Ypred.cpu().data.numpy(), Ytruth_file
