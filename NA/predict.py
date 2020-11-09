@@ -148,9 +148,9 @@ def creat_mm_dataset():
     flags = load_flags(model_folder)
     flags.eval_model = model_folder
     ntwk = Network(NA, flags, train_loader=None, test_loader=None, inference_mode=True, saved_model=flags.eval_model)
-    #geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'Xpred_full.csv')
-    geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'Xpred_small.csv')
-    Y_filename = geometry_points.replace('Xpred', 'Ypred')
+    #geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x.csv')
+    geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x_small.csv')
+    Y_filename = geometry_points.replace('data_x', 'data_y')
 
     # Set up the list of prediction files
     pred_list = []
@@ -168,11 +168,11 @@ def creat_mm_dataset():
         Y_ensemble[:, : ,i] = pred_list[i]
 
     Y_ensemble = np.mean(Y_ensemble, axis=2)
-    X = pd.read_csv(geometry_points, header=None, sep=' ').values
-    MM_data = np.concatenate((X, Y_ensemble), axis=1)
-    MM_data_file = geometry_points.replace('Xpred', 'MM_data')
+    #X = pd.read_csv(geometry_points, header=None, sep=' ').values
+    #MM_data = np.concatenate((X, Y_ensemble), axis=1)
+    #MM_data_file = geometry_points.replace('data_x', 'dataIn/MM_data')
     np.savetxt(Y_filename, Y_ensemble)
-    np.savetxt(MM_data_file, MM_data)
+    #np.savetxt(MM_data_file, MM_data)
 
 
 if __name__ == '__main__':

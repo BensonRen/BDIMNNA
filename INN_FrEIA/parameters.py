@@ -50,7 +50,7 @@ LEARN_RATE = 1e-3
 # DECAY_STEP = 25000 # This is for step decay, however we are using dynamic decaying
 LR_DECAY_RATE = 0.9
 STOP_THRESHOLD = -float('inf')
-CKPT_DIR = '/work/sr365/INN/'
+CKPT_DIR = 'models/'
 
 # Data specific params
 X_RANGE = [i for i in range(2, 10 )]

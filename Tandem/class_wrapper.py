@@ -101,7 +101,7 @@ class Network(object):
         if torch.cuda.is_available:
             BDY_loss = BDY_loss.cuda()
         # Boundary loss of the geometry_eval to be less than 1
-        if G is not None
+        if G is not None:
             X_range, X_lower_bound, X_upper_bound = self.get_boundary_lower_bound_uper_bound()
             X_mean = (X_lower_bound + X_upper_bound) / 2        # Get the mean
             relu = torch.nn.ReLU()

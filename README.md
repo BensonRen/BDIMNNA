@@ -45,7 +45,8 @@ The reason why the mm data creation is in the NA is that we are using the forwar
 python predict.py  (The one line says creat_mm_dataset)
 ```
 
-The generated file called "MM_data_full.csv" is the Meta-material data that you should read for further training and is regarded as the ground truth for next stages. (Some moving of the data file might be needed)
+The generated file called "MM_data_full.csv" is the Meta-material data that you should read for further training and\
+ is regarded as the ground truth for next stages. Move the file to dataIn/ folder (as the only file in the folder).
 
 ## Training
 
@@ -73,6 +74,9 @@ python evaluate.py
 > Note that since we are benchmarking and comparing the time-performance trade-off of various networks structures,
 > for a single query data point, multiple trails (200) would be run and each trail would get a different inverse 
 > solution (except for Tandem model which is deterministic) as depicted in Fig 4 in main paper.
+>
+> The function evaluate.py has multiple options (all documented) and one can use different combination of them to test 
+> experiment relevant to the applicaiton.
 >
 ## Results
 

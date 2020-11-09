@@ -145,7 +145,7 @@ class Network(object):
                     spectra = spectra.cuda()                            # Put data onto GPU
                 self.optm.zero_grad()                               # Zero the gradient first
                 G_pred, z_mean, z_log_var = self.model(geometry, spectra)              # Get G_pred
-                loss, loss_list = self.make_loss(logit=G_pred, labels=geometry, boundary=True,
+                loss, loss_list = self.make_loss(logit=G_pred, labels=geometry,
                                                                    z_mean=z_mean, z_log_var=z_log_var)
                 loss.backward()                                     # Calculate the backward gradients
                 self.optm.step()                                    # Move one step the optimizer
@@ -177,7 +177,7 @@ class Network(object):
                         geometry = geometry.cuda()
                         spectra = spectra.cuda()
                     G_pred, z_mean, z_log_var = self.model(geometry, spectra)  # Get G_pred
-                    loss, loss_list = self.make_loss(logit=G_pred, labels=geometry, boundary=True,
+                    loss, loss_list = self.make_loss(logit=G_pred, labels=geometry,
                                           z_mean=z_mean, z_log_var=z_log_var)  # Get the loss tensor
                     test_loss += loss                                       # Aggregate the loss
                     loss_aggregate_list += loss_list                    # Aggregate the other loss (in np form)

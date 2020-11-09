@@ -43,9 +43,11 @@ def retrain_different_dataset(index):
      This function is to evaluate all different datasets in the model with one function call
      """
      from utils.helper_functions import load_flags
-     data_set_list = ["robotic_arm","sine_wave","ballistics","meta_material"]
-     for eval_model in data_set_list:
-        flags = load_flags(os.path.join("models", eval_model))
+     data_set_list = ["meta_material","robotic_arm","sine_wave","ballistics"]
+     for train_model in data_set_list:
+        flags = load_flags(os.path.join("models", train_model))
+        #if train_model is 'meta_material':
+        #    flags.data_dir = os.path.join('../', 'Simulated_DataSets', 'Meta_material_Neural_Simulator')
         flags.model_name = "retrain_" + flags.model_name
         flags.ckpt_dir = 'models/'
         flags.batch_size = 1024
