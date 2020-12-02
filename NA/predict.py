@@ -148,7 +148,9 @@ def creat_mm_dataset():
     flags = load_flags(model_folder)
     flags.eval_model = model_folder
     ntwk = Network(NA, flags, train_loader=None, test_loader=None, inference_mode=True, saved_model=flags.eval_model)
+    # This is the full file version, which would take a while. Testing pls use the next line one
     #geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x.csv')
+    # Small version is for testing, the large file taks a while to be generated...
     geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x_small.csv')
     Y_filename = geometry_points.replace('data_x', 'data_y')
 

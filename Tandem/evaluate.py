@@ -77,7 +77,7 @@ def evaluate_different_dataset(multi_flag, eval_data_all):
      data_set_list = ["robotic_arm","sine_wave","ballistics","meta_material"]
      for eval_model in data_set_list:
         useless_flags = flag_reader.read_flag()
-        useless_flags.eval_model = eval_model
+        useless_flags.eval_model = "retrain0" + eval_model
         evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all)
 
 if __name__ == '__main__':
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     print(useless_flags.eval_model)
     # Call the evaluate function from model
     #evaluate_from_model(useless_flags.eval_model, multi_flag=False, eval_data_all=True)
-    evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    #evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    evaluate_different_dataset(multi_flag=False, eval_data_all=False)
     #evaluate_from_model(useless_flags.eval_model)
     #evaluate_all("models/MM")

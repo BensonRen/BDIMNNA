@@ -45,7 +45,7 @@ def retrain_different_dataset(index):
      data_set_list = ["meta_material","robotic_arm","sine_wave","ballistics"]
      for eval_model in data_set_list:
         flags = load_flags(os.path.join("models", eval_model))
-        flags.model_name = "retrain_" + flags.model_name
+        flags.model_name = "retrain_" + str(index) + eval_model
         flags.ckpt_dir = 'models/'
         flags.batch_size = 1024
         flags.train_step = 500
@@ -62,5 +62,5 @@ if __name__ == '__main__':
     #training_from_flag(flags)
 
     # Do the retraining for all the data set to get the training for reproducibility
-    for i in range(5):
+    for i in range(1):
         retrain_different_dataset(i)
