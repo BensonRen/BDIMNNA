@@ -33,9 +33,6 @@ def evaluate_from_model(model_dir, multi_flag=False, eval_data_all=False):
 
     flags.test_ratio = get_test_ratio_helper(flags)
 
-    # 2020.10.10 only, delete afterward
-    flags.test_ratio *= 2
-    
     # Get the data
     train_loader, test_loader = data_reader.read_data(flags, eval_data_all=eval_data_all)
     print("Making network now")
@@ -73,12 +70,13 @@ def evaluate_different_dataset(multi_flag, eval_data_all):
      """
      This function is to evaluate all different datasets in the model with one function call
      """
-     data_set_list = ["meta_material"]
-     #data_set_list = ["robotic_arm","sine_wave","ballistics"]
+     #data_set_list = []
+     data_set_list = ["meta_material","sine_wave","ballistics","robotic_arm"]
      for eval_model in data_set_list:
-        useless_flags = flag_reader.read_flag()
-        useless_flags.eval_model = eval_model
-        evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all)
+        for j in range(1):
+            useless_flags = flag_reader.read_flag()
+            useless_flags.eval_model = "retrain" + str(j) + eval_model
+            evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all)
 
 
 if __name__ == '__main__':
@@ -89,11 +87,11 @@ if __name__ == '__main__':
     #evaluate_from_model(useless_flags.eval_model)
     #evaluate_from_model(useless_flags.eval_model, multi_flag=True)
     #evaluate_from_model(useless_flags.eval_model, multi_flag=False, eval_data_all=True)
-    evaluate_different_dataset(multi_flag=False, eval_data_all=False)
-    #evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    #evaluate_different_dataset(multi_flag=False, eval_data_all=False)
+    evaluate_different_dataset(multi_flag=True, eval_data_all=False)
     # Call the evaluate function from model
     # evaluate_from_model(useless_flags.eval_model)
 
     #evaluate_all("/work/sr365/INN/sine_wave")
-    #evaluate_all("models/")
+    #evaluate_all("models/swipe")
 

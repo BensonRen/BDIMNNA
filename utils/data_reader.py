@@ -373,9 +373,13 @@ def read_data_robotic_arm(flags, eval_data_all=False):
 
 def read_data_ensemble_MM(flags, eval_data_all=False):
     data_dir = os.path.join('../', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn')
-    #data_dir = '/work/sr365/MM_ensemble/dataIn/'
-    data_x = pd.read_csv(os.path.join(data_dir, 'data_x.csv'), header=None, sep=' ').astype('float32').values
-    data_y = pd.read_csv(os.path.join(data_dir, 'data_y.csv'), header=None, sep=' ').astype('float32').values
+    data_x = pd.read_csv(os.path.join(data_dir, 'data_x.csv'), header=None, sep=',').astype('float32').values
+    data_y = pd.read_csv(os.path.join(data_dir, 'data_y.csv'), header=None, sep=',').astype('float32').values
+    print("I am reading data from the:", data_dir)
+    
+    
+    #data_x = pd.read_csv(os.path.join(data_dir, 'data_x.csv'), header=None, sep=' ').astype('float32').values
+    #data_y = pd.read_csv(os.path.join(data_dir, 'data_y.csv'), header=None, sep=' ').astype('float32').values
     if eval_data_all:
         return get_data_into_loaders(data_x, data_y, flags.batch_size, SimulatedDataSet_regress, test_ratio=0.999)
     return get_data_into_loaders(data_x, data_y, flags.batch_size, SimulatedDataSet_regress, test_ratio=flags.test_ratio)
@@ -395,7 +399,9 @@ def read_data(flags, eval_data_all=False):
     :return:
     """
     if flags.data_set == 'meta_material':
+        print("This is a meta-material dataset")
         if flags.geoboundary[0] == -1:          # ensemble produced ones
+            print("reading from ensemble place")
             train_loader, test_loader = read_data_ensemble_MM(flags, eval_data_all=eval_data_all)
         else:
             train_loader, test_loader = read_data_meta_material(x_range=flags.x_range,
@@ -406,6 +412,7 @@ def read_data(flags, eval_data_all=False):
                                                                 data_dir=flags.data_dir,
                                                                 eval_data_all=eval_data_all,
                                                                 test_ratio=flags.test_ratio)
+            print("I am reading data from:", data_dir)
         # Reset the boundary is normalized
         if flags.normalize_input:
             flags.geoboundary_norm = [-1, 1, -1, 1]

@@ -21,12 +21,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-def predict_from_model(pre_trained_model, Xpred_file, no_plot=True):
+def predict_from_model(pre_trained_model, Xpred_file, no_plot=True, load_state_dict=None):
     """
     Predicting interface. 1. Retreive the flags 2. get data 3. initialize network 4. eval
     :param model_dir: The folder to retrieve the model
     :param Xpred_file: The Prediction file position
     :param no_plot: If True, do not plot (For multi_eval)
+    :param load_state_dict: The new way to load the model for ensemble MM
     :return: None
     """
     # Retrieve the flag object
@@ -41,11 +42,11 @@ def predict_from_model(pre_trained_model, Xpred_file, no_plot=True):
     flags.test_ratio = 0.1              #useless number  
 
     # Get the data, this part is useless in prediction but just for simplicity
-    train_loader, test_loader = data_reader.read_data(flags)
+    #train_loader, test_loader = data_reader.read_data(flags)
     print("Making network now")
 
     # Make Network
-    ntwk = Network(NA, flags, train_loader, test_loader, inference_mode=True, saved_model=flags.eval_model)
+    ntwk = Network(NA, flags, train_loader=None, test_loader=None, inference_mode=True, saved_model=flags.eval_model)
     print("number of trainable parameters is :")
     pytorch_total_params = sum(p.numel() for p in ntwk.model.parameters() if p.requires_grad)
     print(pytorch_total_params)
@@ -54,17 +55,17 @@ def predict_from_model(pre_trained_model, Xpred_file, no_plot=True):
     
     if not no_plot:
         # Plot the MSE distribution
-        pred_file, truth_file = ntwk.predict(Xpred_file, no_save=False)
+        pred_file, truth_file = ntwk.predict(Xpred_file, no_save=False, load_state_dict=load_state_dict)
         flags.eval_model = pred_file.replace('.','_') # To make the plot name different
         plotMSELossDistrib(pred_file, truth_file, flags)
     else:
-        pred_file, truth_file = ntwk.predict(Xpred_file, no_save=True)
+        pred_file, truth_file = ntwk.predict(Xpred_file, no_save=True, load_state_dict=load_state_dict)
     
     print("Evaluation finished")
 
     return pred_file, truth_file, flags
 
-def ensemble_predict(model_list, Xpred_file, model_dir=None, no_plot=True, remove_extra_files=True):
+def ensemble_predict(model_list, Xpred_file, model_dir=None, no_plot=True, remove_extra_files=True, state_dict=False):
     """
     This predicts the output from an ensemble of models
     :param model_list: The list of model names to aggregate
@@ -72,13 +73,18 @@ def ensemble_predict(model_list, Xpred_file, model_dir=None, no_plot=True, remov
     :param model_dir: The directory to plot the plot
     :param no_plot: If True, do not plot (For multi_eval)
     :param remove_extra_files: Remove all the files generated except for the ensemble one
+    :param state_dict: New way to load model using state_dict instead of load module
     :return: The prediction Ypred_file
     """
     print("this is doing ensemble prediction for models :", model_list)
     pred_list = []
     # Get the predictions into a list of np array
     for pre_trained_model in model_list:
-        pred_file, truth_file, flags = predict_from_model(pre_trained_model, Xpred_file)
+        if state_dict is False:
+            pred_file, truth_file, flags = predict_from_model(pre_trained_model, Xpred_file)
+        else:
+            model_folder = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'meta_material')
+            pred_file, truth_file, flags = predict_from_model(model_folder, Xpred_file, load_state_dict=pre_trained_model)
         #pred = np.loadtxt(pred_file, delimiter=' ')
         #if remove_extra_files:          # Remove the generated files
         #    os.remove(pred_file)
@@ -116,26 +122,33 @@ def predict_all(models_dir="data"):
     return None
 
 
-def ensemble_predict_master(model_dir, Xpred_file, plot_dir=None):
+def ensemble_predict_master(model_dir, Xpred_file, no_plot, plot_dir=None):
     print("entering folder to predict:", model_dir)
     model_list = []
+    
+    # patch for new way to load model using state_dict
+    state_dict = False
+    if 'state_dicts' in model_dir:
+        state_dict = True
+
+    # get the list of models to load
     for model in os.listdir(model_dir):
         print("entering:", model)
-        if 'skip' in model:             # For skipping certain folders
+        if 'skip' in model or '.zip' in model :             # For skipping certain folders
             continue;
-        if os.path.isdir(os.path.join(model_dir,model)):
+        if os.path.isdir(os.path.join(model_dir,model)) or '.pth' in model:
             model_list.append(os.path.join(model_dir, model))
     if plot_dir is None:
-        ensemble_predict(model_list, Xpred_file, model_dir)
+        ensemble_predict(model_list, Xpred_file, model_dir, state_dict=state_dict, no_plot=no_plot)
     else:
-        ensemble_predict(model_list, Xpred_file, plot_dir)
+        ensemble_predict(model_list, Xpred_file, plot_dir, state_dict=state_dict, no_plot=no_plot)
         
 
 
-def predict_ensemble_for_all(model_dir, Xpred_file_dirs):
+def predict_ensemble_for_all(model_dir, Xpred_file_dirs, no_plot):
     for files in os.listdir(Xpred_file_dirs):
-        if 'Xpred' in files:
-            ensemble_predict_master(model_dir, os.path.join(Xpred_file_dirs, files), Xpred_file_dirs)
+        if 'Xpred' in files and 'meta_material' in files:
+            ensemble_predict_master(model_dir, os.path.join(Xpred_file_dirs, files), Xpred_file_dirs, no_plot=no_plot)
 
 def creat_mm_dataset():
     """
@@ -178,17 +191,19 @@ def creat_mm_dataset():
 
 
 if __name__ == '__main__':
-    """
-    #predict_all('/work/sr365/multi_eval/Random/meta_material')
-    k_list = [5,10,15,19]
-    for k in k_list:
-        ensemble_predict_master('/work/sr365/new_data_investigation/MM_augmented/top{}/'.format(k), 
-                                '/work/sr365/new_data_investigation/MM_augmented/top{}/Xpred.csv'.format(k))
-                                """
-    #ensemble_predict_master('/work/sr365/new_data_investigation/MM_both_augmented_ensemble/', 
-    #                        '/work/sr365/new_data_investigation/MM_both_augmented_ensemble/Xpred.csv')
-    #predict_from_model("models/20200603_123559/","data/Xpred.csv",no_plot=False)
-    creat_mm_dataset()
-    #ensemble_predict_master('/work/sr365/ensemble_forward/models', '/work/sr365/ensemble_forward/Xpred.csv')
-    #predict_ensemble_for_all('/work/sr365/new_data_investigation/MM_both_augmented_ensemble/', '/hpc/home/sr365/Pytorch/VAE/data/')  
-    #predict_ensemble_for_all('/work/sr365/new_data_investigation/MM_both_augmented_ensemble/', '/work/sr365/multi_eval/NA/MMcombined')
+    # To create Meta-material dataset, use this line 
+    #creat_mm_dataset()
+    
+   
+    # Single evaluation in the data folder of each method
+    #method_list = ['Tandem','MDN','INN_FrEIA','cINN','NA','VAE']
+    #method_list = ['NA']
+    #for method in method_list:
+    #    predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../'+ method + '/data/tmp/', no_plot=False)  
+        
+    
+    # Multi evaluation in the multi_eval folder of each method
+    #method_list_multi = ['Tandem','MDN','INN','cINN','NA','VAE']
+    method_list_multi = ['NA']
+    for method in method_list_multi:
+        predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../multi_eval/'+ method + '/meta_material/', no_plot=True)  

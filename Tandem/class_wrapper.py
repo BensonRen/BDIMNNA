@@ -119,7 +119,7 @@ class Network(object):
         if self.flags.data_set == 'sine_wave':
             return np.array([2, 2]), np.array([-1, -1]), np.array([1, 1])
         elif self.flags.data_set == 'ballistics':
-            return np.array([2, 1.5, 1.256, 1]), np.array([-1, 0.75, -1.725, 0.5]), np.array([1, 2.25, 1.42, 1.5])
+            return np.array([2, 2, 1.099, 1]), np.array([-1, 0.5, 0.157, 0.46]), np.array([1, 2.5, 1.256, 1.46])
         elif self.flags.data_set == 'robotic_arm':
             return np.array([1.88, 3.7, 3.82, 3.78]), np.array([-0.87, -1.87, -1.92, -1.73]), np.array([1.018, 1.834, 1.897, 2.053])
         elif self.flags.data_set == 'meta_material':
@@ -414,7 +414,7 @@ class Network(object):
         tk.record(1)
         return Ypred_file, Ytruth_file
 
-    def evaluate_multiple_time(self, time=200, save_dir='/work/sr365/multi_eval/Tandem/'):
+    def evaluate_multiple_time(self, time=200, save_dir='../multi_eval/Tandem/'):
         """
         Make evaluation multiple time for deeper comparison for stochastic algorithms
         :param save_dir: The directory to save the result

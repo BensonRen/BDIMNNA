@@ -95,7 +95,7 @@ if __name__ == '__main__':
     #Multiple model evaluation #
     ############################
     ### Call the "evaluate_different_dataset" function to evaluate all the models in the "models" folder, the multi_flag is to control whether evaulate across T or only do T=1 (if set to False), make sure you change the model name in function if you have any different model name 
-    evaluate_different_dataset(multi_flag=False, eval_data_all=False)
-    #evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    #evaluate_different_dataset(multi_flag=False, eval_data_all=False)
+    evaluate_different_dataset(multi_flag=True, eval_data_all=False)
     #evaluate_all("models/MM")
 

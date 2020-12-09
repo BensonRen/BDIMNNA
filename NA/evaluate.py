@@ -43,15 +43,18 @@ def evaluate_from_model(model_dir, multi_flag=False, eval_data_all=False, save_m
 
     if flags.data_set == 'meta_material':
         save_Simulator_Ypred = False
+        print("this is MM dataset, setting the save_Simulator_Ypred to False")
     flags.batch_size = 1                            # For backprop eval mode, batchsize is always 1
     flags.lr = 0.5
     flags.eval_batch_size = eval_flags.eval_batch_size
     flags.train_step = eval_flags.train_step
 
+    print(flags)
+
     # Get the data
     train_loader, test_loader = data_reader.read_data(flags, eval_data_all=eval_data_all)
     print("Making network now")
-
+    
     # Make Network
     ntwk = Network(NA, flags, train_loader, test_loader, inference_mode=True, saved_model=flags.eval_model)
     print("number of trainable parameters is :")
@@ -62,7 +65,7 @@ def evaluate_from_model(model_dir, multi_flag=False, eval_data_all=False, save_m
     # Evaluation process
     print("Start eval now:")
     if multi_flag:
-        pred_file, truth_file = ntwk.evaluate(save_dir='/work/sr365/multi_eval/NA_noboundary/' + flags.data_set, save_all=True,
+        pred_file, truth_file = ntwk.evaluate(save_dir='../multi_eval/NA/' + flags.data_set, save_all=True,
                                                 save_misc=save_misc, MSE_Simulator=MSE_Simulator,save_Simulator_Ypred=save_Simulator_Ypred)
     else:
         pred_file, truth_file = ntwk.evaluate(save_misc=save_misc, MSE_Simulator=MSE_Simulator, save_Simulator_Ypred=save_Simulator_Ypred)
@@ -86,27 +89,22 @@ def evaluate_different_dataset(multi_flag, eval_data_all, save_Simulator_Ypred=F
      """
      This function is to evaluate all different datasets in the model with one function call
      """
-     data_set_list = ["robotic_arm","sine_wave"]
+     data_set_list = ["robotic_arm","sine_wave","ballistics","meta_material"]
      for eval_model in data_set_list:
-        useless_flags = flag_reader.read_flag()
-        useless_flags.eval_model = eval_model
-        evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all, save_Simulator_Ypred=save_Simulator_Ypred, MSE_Simulator=MSE_Simulator)
+        for j in range(1):
+            useless_flags = flag_reader.read_flag()
+            useless_flags.eval_model = "retrain" + str(j) + eval_model
+            evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all, save_Simulator_Ypred=save_Simulator_Ypred, MSE_Simulator=MSE_Simulator)
 
 
 if __name__ == '__main__':
     # Read the flag, however only the flags.eval_model is used and others are not used
     eval_flags = flag_reader.read_flag()
 
-    #print(eval_flags.eval_model)
-    # Call the evaluate function from model
-    #evaluate_all()
-
     #####################
     # different dataset #
     #####################
-    evaluate_different_dataset(multi_flag=True, eval_data_all=False, save_Simulator_Ypred=True, MSE_Simulator=False)
-
-    
-    # Eval META_MATERIAL
-    #evaluate_from_model(eval_flags.eval_model, save_misc=False, multi_flag=False, save_Simulator_Ypred=False, MSE_Simulator=False)
-
+    # This is to run the single evaluation, please run this first to make sure the current model is well-trained before going to the multiple evaluation code below
+    evaluate_different_dataset(multi_flag=False, eval_data_all=False, save_Simulator_Ypred=True, MSE_Simulator=False)
+    # This is for multi evaluation for generating the Fig 3, evaluating the models under various T values
+    #evaluate_different_dataset(multi_flag=True, eval_data_all=False, save_Simulator_Ypred=True, MSE_Simulator=False)

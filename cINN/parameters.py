@@ -5,17 +5,17 @@ The parameter file storing the parameters for INN Model
 # Define which data set you are using
 # DATA_SET = 'meta_material'
 # DATA_SET = 'gaussian_mixture'
-DATA_SET = 'sine_wave'
+# DATA_SET = 'sine_wave'
 # DATA_SET = 'naval_propulsion'
 # DATA_SET = 'robotic_arm'
-# DATA_SET = 'ballistics'
+DATA_SET = 'ballistics'
 TEST_RATIO = 0.2
 
 # Architectural Params
-DIM_Z = 3
-DIM_X = 2
+DIM_Z = 4
+DIM_X = 4
 DIM_Y = 1
-COUPLE_LAYER_NUM = 5
+COUPLE_LAYER_NUM = 13
 DIM_SPEC = None
 # The below definitions are useless now since we are using the package
 SUBNET_LINEAR = []                                          # Linear units for Subnet FC layer
@@ -57,7 +57,7 @@ X_RANGE = [i for i in range(2, 10 )]
 #Y_RANGE = [i for i in range(10 , 2011 )]                       # Real Meta-material dataset range
 Y_RANGE = [i for i in range(10 , 310 )]                         # Artificial Meta-material dataset
 FORCE_RUN = True
-MODEL_NAME  = None
+MODEL_NAME  = 'ballistics'
 # MODEL_NAME  = 'dim_z_2 + wBN + 100 + lr1e-3 + reg5e-3'
 DATA_DIR = '../'                                               # All simulated simple dataset
 #DATA_DIR = '/work/sr365/'                                      # real Meta-material dataset

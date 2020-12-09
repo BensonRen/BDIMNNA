@@ -430,10 +430,7 @@ def MeanAvgnMinMSEvsTry(data_dir):
     ####################################################################
     if 'NA' in data_dir or 'BP' in data_dir: 
         l, w = np.shape(Yt)
-        if 'meta' in data_dir:
-            num_trails = 200
-        else:
-            num_trails = 200
+        num_trails = 200
         Ypred_mat = np.zeros([l, num_trails, w])
         check_full = np.zeros(l)                                     # Safety check for completeness
         for files in os.listdir(data_dir):
@@ -521,8 +518,8 @@ def MeanAvgnMinMSEvsTry(data_dir):
         mse_avg_list = np.zeros([len(Ypred_list),])
         mse_std_list = np.zeros([len(Ypred_list),])
         mse_quan2575_list = np.zeros([2, len(Ypred_list)])
-        if 'NA' in data_dir:            # Emperically we found that due to the self rank of NA, first 10% solutions are overfitting, therefore abandoned
-            cut_front = 100
+        if 'NA' in data_dir:            
+            cut_front = 0
         else:
             cut_front = 0
         for i in range(len(Ypred_list)-cut_front):
@@ -660,7 +657,7 @@ def DrawAggregateMeanAvgnMSEPlot(data_dir, data_name, save_name='aggregate_plot'
                 quan2575_dict[dirs] = mse_quan2575_list
     print(min_dict)
        
-    def plotDict(dict, name, data_name=None, logy=False, time_in_s_table=None, plot_points=51, avg_dict=None, resolution=10, err_dict=None):
+    def plotDict(dict, name, data_name=None, logy=False, time_in_s_table=None, plot_points=51, avg_dict=None, resolution=5, err_dict=None):
         """
         :param name: the name to save the plot
         :param dict: the dictionary to plot
@@ -774,10 +771,7 @@ def DrawEvaluationTime(data_dir, data_name, save_name='evaluation_time', logy=Fa
         plt.savefig(os.path.join(data_dir, data_name + save_name + '.png'))
 
 if __name__ == '__main__':
-    MeanAvgnMinMSEvsTry_all('/work/sr365/multi_eval')
-    #datasets = ['robotic_arm','sine_wave','ballistics']
+    MeanAvgnMinMSEvsTry_all('../multi_eval')
     datasets = ['meta_material', 'robotic_arm','sine_wave','ballistics']
     for dataset in datasets:
-        #DrawAggregateMeanAvgnMSEPlot('/work/sr365/multi_eval', dataset)
-        DrawAggregateMeanAvgnMSEPlot('/work/sr365/NIPS_previous_submitted_multi_eval/multi_eval', dataset)
-    #data_dir, data_name, save_name='aggregate_plot', gif_flag=False): # Depth=2 now based on current directory structure
+        DrawAggregateMeanAvgnMSEPlot('../multi_eval', dataset)

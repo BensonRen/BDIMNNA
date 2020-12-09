@@ -248,10 +248,17 @@ class Network(object):
                 print('model in eval:', self.model)
                 pi, sigma, mu = self.model(spectra)  # Get the output
                 Xpred = mdn.sample(pi, sigma, mu).detach().cpu().numpy()
+                # self.plot_histogram(loss, ind)                                # Debugging purposes
+                np.savetxt(fxt, geometry.cpu().data.numpy())
+                np.savetxt(fyt, spectra.cpu().data.numpy())
+                np.savetxt(fxp, Xpred)
+                if self.flags.data_set != 'meta_material':
+                    Ypred = simulator(self.flags.data_set, Xpred)
+                    np.savetxt(fyp, Ypred)
         tk.record(1)
         return Ypred_file, Ytruth_file
 
-    def evaluate_multiple_time(self, time=200, save_dir='/work/sr365/multi_eval/MDN/'):
+    def evaluate_multiple_time(self, time=200, save_dir='../multi_eval/MDN/'):
         """
         Make evaluation multiple time for deeper comparison for stochastic algorithms
         :param save_dir: The directory to save the result

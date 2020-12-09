@@ -95,7 +95,7 @@ class Network(object):
             X_mean = (X_lower_bound + X_upper_bound) / 2        # Get the mean
             relu = torch.nn.ReLU()
             BDY_loss_all = 1 * relu(torch.abs(G - self.build_tensor(X_mean)) - 0.5 * self.build_tensor(X_range))
-            BDY_loss = torch.mean(BDY_loss_all)
+            BDY_loss = 10*torch.mean(BDY_loss_all)
         self.MSE_loss = MSE_loss
         self.Boundary_loss = BDY_loss
         return torch.add(MSE_loss, BDY_loss)
@@ -277,7 +277,8 @@ class Network(object):
                 # suppress printing to evaluate time
                 np.savetxt(fxt, geometry.cpu().data.numpy())
                 np.savetxt(fyt, spectra.cpu().data.numpy())
-                np.savetxt(fyp, Ypred)
+                if self.flags.data_set != 'meta_material':
+                    np.savetxt(fyp, Ypred)
                 np.savetxt(fxp, Xpred)
         return Ypred_file, Ytruth_file
 
@@ -332,6 +333,7 @@ class Network(object):
             exclude_top = 0
             trail_nums = 1000
             good_index = loss_sort[exclude_top:trail_nums+exclude_top, 1].astype('int')                        # Get the indexs
+            print("In save all funciton, the top 10 index is:", good_index[:10])
             saved_model_str = self.saved_model.replace('/', '_') + 'inference' + str(ind)
             Ypred_file = os.path.join(save_dir, 'test_Ypred_point{}.csv'.format(saved_model_str))
             Xpred_file = os.path.join(save_dir, 'test_Xpred_point{}.csv'.format(saved_model_str))
@@ -351,11 +353,7 @@ class Network(object):
         ###################################
         # From candidates choose the best #
         ###################################
-        print("Your MSE_Simulator status is :", MSE_Simulator)
-        if MSE_Simulator:                               # If we are using Simulator as Ypred standard
-            Ypred = simulator(self.flags.data_set, geometry_eval_input.cpu().data.numpy())
-        else:
-            Ypred = logit.cpu().data.numpy()
+        Ypred = logit.cpu().data.numpy()
 
         if len(np.shape(Ypred)) == 1:           # If this is the ballistics dataset where it only has 1d y'
             Ypred = np.reshape(Ypred, [-1, 1])
@@ -363,6 +361,7 @@ class Network(object):
         # calculate the MSE list and get the best one
         MSE_list = np.mean(np.square(Ypred - target_spectra_expand.cpu().data.numpy()), axis=1)
         best_estimate_index = np.argmin(MSE_list)
+        print("The best performing one is:", best_estimate_index)
         Xpred_best = np.reshape(np.copy(geometry_eval_input.cpu().data.numpy()[best_estimate_index, :]), [1, -1])
         if save_Simulator_Ypred:
             Ypred = simulator(self.flags.data_set, geometry_eval_input.cpu().data.numpy())
@@ -425,7 +424,7 @@ class Network(object):
         elif self.flags.data_set == 'meta_material':
             return np.array([2.272,2.272,2.272,2.272,2,2,2,2]), np.array([-1,-1,-1,-1,-1,-1,-1,-1]), np.array([1.272,1.272,1.272,1.272,1,1,1,1])
         elif self.flags.data_set == 'ballistics':
-            return np.array([2, 1.5, 1.256, 1]), np.array([-1, 0.75, -1.725, 0.5]), np.array([1, 2.25, 1.42, 1.5])
+            return np.array([2, 2, 1.099, 1]), np.array([-1, 0.5, 0.157, 0.46]), np.array([1, 2.5, 1.256, 1.46])
         elif self.flags.data_set == 'robotic_arm':
             return np.array([1.2, 2.4, 2.4, 2.4]), np.array([-0.6, -1.2, -1.2, -1.2]), np.array([0.6, 1.2, 1.2, 1.2])
         else:
@@ -444,6 +443,7 @@ class Network(object):
             self.load()         # load the model in the usual way
         else:
             self.model.load_state_dict(torch.load(load_state_dict))
+       
         Ypred_file = Xpred_file.replace('Xpred', 'Ypred')
         Ytruth_file = Ypred_file.replace('Ypred', 'Ytruth')
         Xpred = pd.read_csv(Xpred_file, header=None, delimiter=',')     # Read the input
@@ -452,11 +452,12 @@ class Network(object):
         Xpred.info()
         print(Xpred.head())
         Xpred_tensor = torch.from_numpy(Xpred.values).to(torch.float)
-
         cuda = True if torch.cuda.is_available() else False
         if cuda:
             self.model.cuda()
             Xpred_tensor = Xpred_tensor.cuda()
+        # Put into evaluation mode
+        self.model.eval()
         Ypred = self.model(Xpred_tensor)
         if load_state_dict is not None:
             Ypred_file = Ypred_file.replace('Ypred', 'Ypred' + load_state_dict[-7:-4])

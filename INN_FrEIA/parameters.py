@@ -5,16 +5,16 @@ The parameter file storing the parameters for INN Model
 # Define which data set you are using
 # DATA_SET = 'meta_material'
 # DATA_SET = 'gaussian_mixture'
-DATA_SET = 'sine_wave'
+# DATA_SET = 'sine_wave'
 # DATA_SET = 'naval_propulsion'
-# DATA_SET = 'robotic_arm'
+DATA_SET = 'robotic_arm'
 # DATA_SET = 'ballistics'
 TEST_RATIO = 0.2
 
 # Architectural Params
-DIM_Z = 1
-DIM_X = 2
-DIM_Y = 1
+DIM_Z = 2
+DIM_X = 4
+DIM_Y = 2
 DIM_TOT = 4
 COUPLE_LAYER_NUM = 6
 DIM_SPEC = None
@@ -33,7 +33,7 @@ LAMBDA_MSE = 0.1             # The Loss factor of the MSE loss (reconstruction l
 LAMBDA_Z = 300.             # The Loss factor of the latent dimension (converging to normal distribution)
 LAMBDA_REV = 400.           # The Loss factor of the reverse transformation (let x converge to input distribution)
 ZEROS_NOISE_SCALE = 5e-2          # The noise scale to add to
-Y_NOISE_SCALE = 1e-1
+Y_NOISE_SCALE = 1e-2
 
 
 # Optimization params

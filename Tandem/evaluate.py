@@ -85,9 +85,20 @@ if __name__ == '__main__':
     useless_flags = flag_reader.read_flag()
 
     print(useless_flags.eval_model)
-    # Call the evaluate function from model
-    #evaluate_from_model(useless_flags.eval_model, multi_flag=False, eval_data_all=True)
-    #evaluate_different_dataset(multi_flag=True, eval_data_all=False)
-    evaluate_different_dataset(multi_flag=False, eval_data_all=False)
+    ##########################
+    #Single model evaluation #
+    ##########################
+    ### Call the evaluate function from model, this "evaluate_from_model" uses the eval_model field in your
+    ### "useless_flag" that reads out from your current parameters.py file in case you want to evaluate single model
     #evaluate_from_model(useless_flags.eval_model)
+    #evaluate_from_model(useless_flags.eval_model, multi_flag=True)
+    #evaluate_from_model(useless_flags.eval_model, multi_flag=False, eval_data_all=True)
+    
+    ############################
+    #Multiple model evaluation #
+    ############################
+    ### Call the "evaluate_different_dataset" function to evaluate all the models in the "models" folder, the multi_flag is to control whether evaulate across T or only do T=1 (if set to False), make sure you change the model name in function if you have any different model name 
+    #evaluate_different_dataset(multi_flag=False, eval_data_all=False)
+    evaluate_different_dataset(multi_flag=True, eval_data_all=False)
     #evaluate_all("models/MM")
+

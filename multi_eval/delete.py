@@ -31,6 +31,10 @@ for folders in os.listdir(input_dir):
                             os.rename(current_file, os.path.join(current_folder, 'Xtruth.csv'))
                         else:
                             os.remove(current_file)
+                    elif '_Ypred_' in file and file.endswith(dataset + '.csv'):
+                        os.rename(current_file, os.path.join(current_folder, 'Ypred.csv'))
+                    elif '_Xpred_' in file and file.endswith(dataset + '.csv'):
+                        os.rename(current_file, os.path.join(current_folder, 'Xpred.csv'))
                     if delete_mse_file_mode and 'mse_' in file:
                         os.remove(current_file)
                         

@@ -48,7 +48,7 @@ def retrain_different_dataset(index):
         flags = load_flags(os.path.join("models", train_model))
         #if train_model is 'meta_material':
         #    flags.data_dir = os.path.join('../', 'Simulated_DataSets', 'Meta_material_Neural_Simulator')
-        flags.model_name = "retrain_" + str(index) + train_model
+        flags.model_name = "retrain" + str(index) + train_model
         flags.ckpt_dir = 'models/'
         flags.batch_size = 1024
         flags.train_step = 500
