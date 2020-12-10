@@ -162,9 +162,9 @@ def creat_mm_dataset():
     flags.eval_model = model_folder
     ntwk = Network(NA, flags, train_loader=None, test_loader=None, inference_mode=True, saved_model=flags.eval_model)
     # This is the full file version, which would take a while. Testing pls use the next line one
-    #geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x.csv')
+    geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x.csv')
     # Small version is for testing, the large file taks a while to be generated...
-    geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x_small.csv')
+    #geometry_points = os.path.join('..', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn', 'data_x_small.csv')
     Y_filename = geometry_points.replace('data_x', 'data_y')
 
     # Set up the list of prediction files
@@ -192,7 +192,7 @@ def creat_mm_dataset():
 
 if __name__ == '__main__':
     # To create Meta-material dataset, use this line 
-    #creat_mm_dataset()
+    creat_mm_dataset()
     
    
     # Single evaluation in the data folder of each method
@@ -204,6 +204,6 @@ if __name__ == '__main__':
     
     # Multi evaluation in the multi_eval folder of each method
     #method_list_multi = ['Tandem','MDN','INN','cINN','NA','VAE']
-    method_list_multi = ['NA']
-    for method in method_list_multi:
-        predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../multi_eval/'+ method + '/meta_material/', no_plot=True)  
+    #method_list_multi = ['NA']
+    #for method in method_list_multi:
+    #    predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../multi_eval/'+ method + '/meta_material/', no_plot=True)  

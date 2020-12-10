@@ -67,5 +67,5 @@ if __name__ == '__main__':
     #training_from_flag(flags)
 
     # Do the retraining for all the data set to get the training 
-    for i in range(1):
+    for i in range(10):
         retrain_different_dataset(i)

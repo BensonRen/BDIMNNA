@@ -373,8 +373,8 @@ def read_data_robotic_arm(flags, eval_data_all=False):
 
 def read_data_ensemble_MM(flags, eval_data_all=False):
     data_dir = os.path.join('../', 'Simulated_DataSets', 'Meta_material_Neural_Simulator', 'dataIn')
-    data_x = pd.read_csv(os.path.join(data_dir, 'data_x.csv'), header=None, sep=',').astype('float32').values
-    data_y = pd.read_csv(os.path.join(data_dir, 'data_y.csv'), header=None, sep=',').astype('float32').values
+    data_x = pd.read_csv(os.path.join(data_dir, 'data_x.csv'), header=None, sep=' ').astype('float32').values
+    data_y = pd.read_csv(os.path.join(data_dir, 'data_y.csv'), header=None, sep=' ').astype('float32').values
     print("I am reading data from the:", data_dir)
     
     
