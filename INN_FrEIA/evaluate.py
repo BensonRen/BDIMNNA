@@ -73,7 +73,7 @@ def evaluate_different_dataset(multi_flag, eval_data_all):
      #data_set_list = []
      data_set_list = ["meta_material","sine_wave","ballistics","robotic_arm"]
      for eval_model in data_set_list:
-        for j in range(1):
+        for j in range(10):
             useless_flags = flag_reader.read_flag()
             useless_flags.eval_model = "retrain" + str(j) + eval_model
             evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all)
@@ -87,11 +87,15 @@ if __name__ == '__main__':
     #evaluate_from_model(useless_flags.eval_model)
     #evaluate_from_model(useless_flags.eval_model, multi_flag=True)
     #evaluate_from_model(useless_flags.eval_model, multi_flag=False, eval_data_all=True)
-    #evaluate_different_dataset(multi_flag=False, eval_data_all=False)
-    evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    
+    ##############################################
+    # evaluate multiple dataset at the same time!#
+    ##############################################
+    evaluate_different_dataset(multi_flag=False, eval_data_all=False)
+    #evaluate_different_dataset(multi_flag=True, eval_data_all=False)
+    
+    
+    
     # Call the evaluate function from model
     # evaluate_from_model(useless_flags.eval_model)
-
-    #evaluate_all("/work/sr365/INN/sine_wave")
-    #evaluate_all("models/swipe")
 
