@@ -148,7 +148,7 @@ def ensemble_predict_master(model_dir, Xpred_file, no_plot, plot_dir=None):
 def predict_ensemble_for_all(model_dir, Xpred_file_dirs, no_plot):
     for files in os.listdir(Xpred_file_dirs):
         if 'Xpred' in files and 'meta_material' in files:
-            ensemble_predict_master(model_dir, os.path.join(Xpred_file_dirs, files), Xpred_file_dirs, no_plot=no_plot)
+            ensemble_predict_master(model_dir, os.path.join(Xpred_file_dirs, files), plot_dir=Xpred_file_dirs, no_plot=no_plot)
 
 def creat_mm_dataset():
     """
