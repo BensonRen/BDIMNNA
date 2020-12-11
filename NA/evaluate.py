@@ -91,7 +91,7 @@ def evaluate_different_dataset(multi_flag, eval_data_all, save_Simulator_Ypred=F
      """
      data_set_list = ["robotic_arm","sine_wave","ballistics","meta_material"]
      for eval_model in data_set_list:
-        for j in range(1):
+        for j in range(10):
             useless_flags = flag_reader.read_flag()
             useless_flags.eval_model = "retrain" + str(j) + eval_model
             evaluate_from_model(useless_flags.eval_model, multi_flag=multi_flag, eval_data_all=eval_data_all, save_Simulator_Ypred=save_Simulator_Ypred, MSE_Simulator=MSE_Simulator)

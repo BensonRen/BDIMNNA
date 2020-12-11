@@ -75,14 +75,16 @@ python evaluate.py
 > This would read the flags.obj and best_model.pt file from the 'models' folder and write the evaluation data.
 > Note that since we are benchmarking and comparing the time-performance trade-off of various networks structures,
 > for a single query data point, multiple trails (200) would be run and each trail would get a different inverse 
-> solution (except for Tandem model which is deterministic) as depicted in Fig 4 in main paper.
+> solution (except for Tandem model which is deterministic) as depicted in Fig 3 in main paper.
 >
 > The function evaluate.py has multiple options (all documented) and one can use different combination of them to test 
-> experiment relevant to the applicaiton.
+> experiment relevant to the applicaiton. Currently the code is prepared to evaluate all the dataset with all 10 training instance for single point evaluation (single point means each algorithm gets 1 chance to provide an inverse answer to a inquiry y point where multi_eval means each algorithm gets multiple chances for each inquiry y and best accuracy is selected. 
 > 
 > The evaluation results would be stored at the "data/" folder in current directory with plot of the histogram of the MSE. You can change the number of inference point (test set ratio) in code "utils/evaluation_helper/get_test_ratio_helper".
 > There are generally 2 modes of evaluation, the single evaluation to determine whether you have a good model trained and another multi_eval mode where the various T values are used and compare to see how efficiently these methods explore the solution space. You would find revelant documentation there.
 > One special thing to mention is that for meta-material dataset, since there is no closed form "Simulator", we would run the neural simulator again just like in meta-material dataset creation step. After you run evaluation, simply go to NA/ folder and run the predict.py with relevant code at __main__ function.
+> After comparing the 10 instance of training and selecting the best performing one, modify the code in predict.py function "evaluate_different_dataset" line 3: for j in range(10) to become only evaluating the best one you choosed from for next step.
+> If the previous step of using validation performance as test set performance bothers you, feel free to run the data generation code again to get a new set of "unseen" data. Our experience is that only selecting from 10 training instance with the same hyper-parameter does not cause significant validation set overfitting and therefore we did not make this default choice here.
 
 ## Comparing the efficiency of the algorithms
 
