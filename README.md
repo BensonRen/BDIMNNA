@@ -22,6 +22,8 @@
 | Matplotlib | \>= 3.1.3|
 |[FrEIA](https://github.com/VLL-HD/FrEIA)  | \>=0.2 | 
 
+We would like to express special thanks to [Visual Learning Lab Heidelberg](https://github.com/VLL-HD) who provided open sourced implementation of their Invertible network structure called Framework for Easily Invertible Architectures (FrEIA) above. We were inspired a lot from their work.
+
 ### Environment
 1. The detailed conda environment is packaged in [.yml file](./demo/environment_droplet.yml).
 2. Add the [Benchmarking Algorithm folder](./Benchmarking%20Algorithms) as one of the source directory to make utils and Simulated_Dataset folders 

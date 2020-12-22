@@ -199,7 +199,7 @@ if __name__ == '__main__':
     #method_list = ['Tandem','MDN','INN_FrEIA','cINN','NA','VAE']
     #method_list = ['NA']
     #for method in method_list:
-    #    predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../'+ method + '/data/tmp/', no_plot=False)  
+    #    predict_ensemble_for_all('../Simulated_DataSets/Meta_material_Neural_Simulator/state_dicts/', '../'+ method + '/data/', no_plot=False)  
         
     
     # Multi evaluation in the multi_eval folder of each method
