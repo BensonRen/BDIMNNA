@@ -28,6 +28,11 @@ We would like to express special thanks to [Visual Learning Lab Heidelberg](http
 1. The detailed conda environment is packaged in [.yml file](./demo/environment_droplet.yml).
 2. Add the [Benchmarking Algorithm folder](./Benchmarking%20Algorithms) as one of the source directory to make utils and Simulated_Dataset folders 
 visible runtime
+
+### Flow chart process
+Individual steps are illustrated below. This is laying the roadmap of how you can recreate the result in our paper. The blue fineprint above each step is the functions you should run and please check the detailed illustration below before you run it. 
+![Flow_chart](./demo/BDIMNNA_flow_chart.png) 
+
 ### Benchmarking datasets
 
 The code to generate the benchmarking dataset can be found in [Simulated_Datasets](./Simulated_DataSets)
