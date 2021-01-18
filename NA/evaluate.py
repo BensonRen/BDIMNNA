@@ -46,6 +46,7 @@ def evaluate_from_model(model_dir, multi_flag=False, eval_data_all=False, save_m
         print("this is MM dataset, setting the save_Simulator_Ypred to False")
     flags.batch_size = 1                            # For backprop eval mode, batchsize is always 1
     flags.lr = 0.5
+    flags.lr_decay_rate = 0.5
     flags.eval_batch_size = eval_flags.eval_batch_size
     flags.train_step = eval_flags.train_step
 

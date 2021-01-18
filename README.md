@@ -112,6 +112,7 @@ python plotsAnalysis.py
 to get the plot, which would be located in the multi_eval/ folder. We also provided the 25% 75% as a basic error bar for a visualization of the uncertainty of the methods.  
 
 > One thing to mention is that due to random initialization of weights, local minimums caused by the rough loss surface and stochastic nature of these algorithms, the plot generated is not going to be exactly like the one on the paper. However, with multiple training (mentioned above), the trend is very stable.
+> Also, after further experiment, we did managed to find better hyper-params for cINN in ballistics dataset and hence included the updated hyper-params in this repo.
 
 
 ## Results

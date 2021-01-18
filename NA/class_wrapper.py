@@ -95,7 +95,11 @@ class Network(object):
             X_mean = (X_lower_bound + X_upper_bound) / 2        # Get the mean
             relu = torch.nn.ReLU()
             BDY_loss_all = 1 * relu(torch.abs(G - self.build_tensor(X_mean)) - 0.5 * self.build_tensor(X_range))
-            BDY_loss = 10*torch.mean(BDY_loss_all)
+            # This is for non-MM, emperical
+            if self.flags.data_set != 'meta_material':
+                BDY_loss = 0.1*torch.sum(BDY_loss_all)
+            else:
+                BDY_loss = 10*torch.mean(BDY_loss_all)
         self.MSE_loss = MSE_loss
         self.Boundary_loss = BDY_loss
         return torch.add(MSE_loss, BDY_loss)
@@ -381,8 +385,8 @@ class Network(object):
             bs = self.flags.eval_batch_size
             numpy_geometry = np.zeros([bs, self.flags.linear[0]])
             numpy_geometry[:, 0] = np.random.normal(0, 0.25, size=[bs,])
-            numpy_geometry[:, 1] = np.random.normal(1.5, 0.25, size=[bs,])
-            numpy_geometry[:, 2] = np.radians(np.random.uniform(9, 72, size=[bs,]))
+            numpy_geometry[:, 1] = np.maximum(np.random.normal(1.5, 0.25, size=[bs,]),0)
+            numpy_geometry[:, 2] = np.radians(np.random.uniform(9, 81, size=[bs,]))
             numpy_geometry[:, 3] = np.random.poisson(15, size=[bs,]) / 15
             geomtry_eval = self.build_tensor(numpy_geometry, requires_grad=True)
         elif self.flags.data_set == 'robotic_arm':
@@ -424,7 +428,7 @@ class Network(object):
         elif self.flags.data_set == 'meta_material':
             return np.array([2.272,2.272,2.272,2.272,2,2,2,2]), np.array([-1,-1,-1,-1,-1,-1,-1,-1]), np.array([1.272,1.272,1.272,1.272,1,1,1,1])
         elif self.flags.data_set == 'ballistics':
-            return np.array([2, 2, 1.099, 1]), np.array([-1, 0.5, 0.157, 0.46]), np.array([1, 2.5, 1.256, 1.46])
+            return np.array([2, 2, 1.256, 1.1]), np.array([-1, 0.5, 0.157, 0.46]), np.array([1, 2.5, 1.413, 1.56])
         elif self.flags.data_set == 'robotic_arm':
             return np.array([1.2, 2.4, 2.4, 2.4]), np.array([-0.6, -1.2, -1.2, -1.2]), np.array([0.6, 1.2, 1.2, 1.2])
         else:
