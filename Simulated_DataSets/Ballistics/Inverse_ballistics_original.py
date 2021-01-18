@@ -308,7 +308,7 @@ if __name__ == '__main__':
     pass
 
     model = InverseBallisticsModel()
-    train_data = InverseBallisticsDataset(model, 12800, None, suffix='train')
+    train_data = InverseBallisticsDataset(model, 10000, None, suffix='train')
     train_loader = train_data.get_dataloader(100)
     
     with open("data_x.csv", 'a') as file_x, open("data_y.csv",'a') as file_y:
