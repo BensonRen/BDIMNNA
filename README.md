@@ -20,9 +20,9 @@
 | Tqdm| \>=4.42.0 |
 | Sklearn | \>=0.22.1|
 | Matplotlib | \>= 3.1.3|
-|[FrEIA](https://github.com/VLL-HD/FrEIA)  | \>=0.2 | 
+|[FrEIA](https://github.com/VLL-HD/FrEIA)  | 0.2 | 
 
-We would like to express special thanks to [Visual Learning Lab Heidelberg](https://github.com/VLL-HD) who provided open sourced implementation of their Invertible network structure called Framework for Easily Invertible Architectures (FrEIA) above. We were inspired a lot from their work.
+We would like to express special thanks to [Visual Learning Lab Heidelberg](https://github.com/VLL-HD) who provided open sourced implementation of their Invertible network structure called Framework for Easily Invertible Architectures (FrEIA) above. Their code base is undergoing non-backward-compatible updates. Therefore to simplify the process we have enclosed their v0.2 code that we used along with our code in this repo. We were inspired a lot from their work and grateful for the implementation of INNs. 
 
 ### Environment
 1. The detailed conda environment is packaged in [.yml file](./demo/environment_droplet.yml).
