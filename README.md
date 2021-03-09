@@ -1,7 +1,7 @@
 
 # Benchmarking Deep Inverse Models over time, and the Neural-Adjoint method
 
-[comment]: <This repository is the official implementation of [My Paper Title](https://arxiv.org/abs/2030.12345).> 
+This repository is the implementation of [Benchmarking Deep Inverse Models over time, and the Neural-Adjoint method](https://papers.nips.cc/paper/2020/hash/007ff380ee5ac49ffc34442f5c2a2b86-Abstract.html). Published in NeurIPS2020 by Simiao Ren, Willie J. Padilla and Jordan Malof.
 
 
 
