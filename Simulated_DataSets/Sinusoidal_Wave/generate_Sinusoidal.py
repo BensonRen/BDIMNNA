@@ -53,7 +53,7 @@ def getYfromX(x):
 if __name__ == '__main__':
     xx = []
     for i in range(x_dimension):
-        xx.append(np.linspace(x_low, x_high, num=num_sample_dimension))         # append each linspace into the list
+        xx.append(np.random.uniform(x_low, x_high, size=num_sample_dimension))         # append each linspace into the list
     x = np.array(np.meshgrid(*xx))                                # shape(x_dim, #point, #point, ...) of data points
     # Reshape the data into one long list
     data_x = np.concatenate([np.reshape(np.ravel(x[i, :]), [-1, 1] ) for i in range(x_dimension)], axis=1)
