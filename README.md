@@ -26,7 +26,7 @@ We would like to express special thanks to [Visual Learning Lab Heidelberg](http
 
 ### Environment
 1. The detailed conda environment is packaged in [.yml file](./demo/environment_droplet.yml).
-2. Add the [Benchmarking Algorithm folder](./Benchmarking%20Algorithms) as one of the source directory to make utils and Simulated_Dataset folders 
+2. Add the main folder (the current, outmost one) as one of the source directory to make utils and Simulated_Dataset folders 
 visible runtime
 
 ### Flow chart process
